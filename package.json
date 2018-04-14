@@ -1,0 +1,14 @@
+{
+  "name": "ws-mp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/FalcoG/ws-mp.git",
+  "author": "Falco Gerritsjans <falcog@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "demo": "node examples/helloworld/index.js"
+  },
+  "dependencies": {
+    "ws": "^5.1.1"
+  }
+}
