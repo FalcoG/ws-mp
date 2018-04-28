@@ -1,5 +1,7 @@
 const ws = new WebSocket('ws://localhost:1338');
 
+import './scss/main.scss';
+
 const queue = {
   'text': []
 };
@@ -31,13 +33,16 @@ class Action {
 
 document.querySelector('[data-action="PlayerText"]').addEventListener('keyup', (e) => {
   if (e.keyCode === 13) {
-    // The server will return this action as PlayerText instead of text.
+    e.target.setAttribute('disabled', true);
     new Action('text', e.target.value).then(
       res => {
         console.log('Message confirmed', res);
+        e.target.value = '';
+        e.target.removeAttribute('disabled');
       },
       err => {
         console.log('Message denied. Reason:', err);
+        e.target.removeAttribute('disabled');
       }
     );
   }
@@ -51,6 +56,10 @@ ws.onmessage = message => {
     case 'PlayerText':
       if (res.success !== undefined) {
         queue[action].shift().finish(res.success, res.message);
+      } else {
+        const elem = document.createElement('li');
+        elem.innerText = res.message;
+        document.querySelector('#chat .output').appendChild(elem);
       }
       break;
   }

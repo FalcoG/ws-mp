@@ -2,7 +2,10 @@ const MultiPlayer = require('../..');
 
 class GameMode extends MultiPlayer {
   constructor () {
-    super(1338);
+    super({
+      port: 1338,
+      auth: true
+    });
   }
 }
 

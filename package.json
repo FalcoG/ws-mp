@@ -6,9 +6,19 @@
   "author": "Falco Gerritsjans <falcog@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "demo": "node examples/helloworld/index.js"
+    "dev-server": "node examples/helloworld/index.js",
+    "dev": "webpack-serve --port 1337"
   },
   "dependencies": {
     "ws": "^5.1.1"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.6.0",
+    "webpack-serve": "^0.3.1"
   }
 }
