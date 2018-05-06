@@ -1,4 +1,5 @@
 const MultiPlayer = require('../..');
+const crypto = require('crypto');
 
 class GameMode extends MultiPlayer {
   constructor () {
@@ -12,7 +13,19 @@ class GameMode extends MultiPlayer {
 const Hello = new GameMode;
 
 Hello.player.on('connect', e => {
-  console.log('Player connected!');
+  console.log('Player connected!', e.user.auth);
+
+  e.user.character = {
+    name: e.user.auth.token === '1337'
+      ? 'Falco'
+      : 'guest-' + crypto.randomBytes(4).toString('hex')
+  }
+
+  if (e.user.character.name === 'Banned-name') {
+    e.promise.reject('Banned');
+  } else {
+    e.promise.resolve(e.user);
+  }
 });
 
 Hello.player.on('text', e => {

@@ -56,30 +56,50 @@ body{
   }
 
   .chat {
-    background: saddlebrown;
-    padding: .3em;
-    border-radius: .2em;
-
     .output {
       max-height: 20vh;
       overflow-y: scroll;
       width: 30em;
       max-width: 30vw;
       margin: 0;
-      background: sandybrown;
-      padding: .5em;
-      border-radius: .2em;
 
-      .self:before {
-        content: 'You: ';
-        color: #444;
+      li {
+        text-shadow: 0 0 0.1em black;
+
+        &[data-username]:before {
+          content: attr(data-username) ': ';
+          color: forestgreen;
+          text-shadow: 0 0 0.1em;
+        }
+
+        &.self:before {
+          color: darkcyan;
+        }
       }
     }
 
     label {
+      background: transparentize(black, 0.8);
+      padding: 0 0 0 .4em;
+      line-height: 1.8em;
+      border-radius: .2em;
+      margin: 1em 0 0;
+      display: inline-block;
+      font-size: 0.9rem;
+
       input {
-        display: block;
-        width: 100%;
+        display: inline-block;
+        background: none;
+        border: 0;
+        padding: .4em;
+
+        line-height: inherit;
+        font-size: inherit;
+        color: inherit;
+
+        &:focus{
+          outline: none;
+        }
       }
     }
   }
@@ -144,6 +164,14 @@ body{
       position: relative;
       border-radius: .2em;
       overflow: hidden;
+
+      &.health {
+        .status { background: #EA2839 }
+      }
+
+      &.thirst {
+        .status { background: dodgerblue }
+      }
 
       .status {
         background: forestgreen;

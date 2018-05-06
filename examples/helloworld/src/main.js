@@ -1,10 +1,30 @@
-const ws = new WebSocket('ws://localhost:1338');
+const queryParams = new URLSearchParams(window.location.search);
+
+const ws = new WebSocket(`ws://token:${queryParams.get('token')}@localhost:1338?token=${queryParams.get('token')}`);
 
 import './scss/main.scss';
 
-const queue = {
-  'text': []
-};
+const queue = {};
+
+class Users {
+  constructor () {
+    this.users = {};
+  }
+
+  add (character, identifier = 'self') {
+    if (!character.name) {
+      this.users = { ...this.users, ...character };
+    } else {
+      this.users[identifier] = character;
+    }
+  }
+
+  get (identifier = 'self') {
+    return this.users[identifier];
+  }
+}
+
+const users = new Users();
 
 class Action {
   constructor (action, value) {
@@ -53,9 +73,11 @@ document.querySelector('[data-action="PlayerText"]').addEventListener('keyup', (
 
 ws.onmessage = message => {
   const res = JSON.parse(message.data);
-  const action = res.action.replace('Player', '').toLowerCase();
 
-  if (!res.id) {
+  const action = res.action.replace('Player', '').toLowerCase();
+  const character = users.get(res.id);
+
+  if (!res.id && res.action !== 'Players' && res.action !== 'PlayerConnect') {
     const item = queue[action].shift();
 
     item.finish(res.error);
@@ -64,6 +86,14 @@ ws.onmessage = message => {
   }
 
   switch (res.action) {
+    case 'Players':
+      users.add(res.users);
+
+      break;
+    case 'PlayerConnect':
+      users.add(res.character, res.id);
+
+      break;
     case 'PlayerText':
       if (res.success && !res.id || !res.success) {
         const elem = document.createElement('li');
@@ -72,6 +102,7 @@ ws.onmessage = message => {
           elem.classList.add('self');
         }
 
+        elem.setAttribute('data-username', character.name);
         elem.innerText = res.message;
 
         const output = document.querySelector('.chat .output');
