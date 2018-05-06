@@ -6,7 +6,9 @@
   "author": "Falco Gerritsjans <falcog@users.noreply.github.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-serve --port 1337 && node examples/helloworld/index.js"
+    "dev": "webpack-serve --port 1337 && node examples/helloworld/index.js",
+    "dev-client": "webpack-serve --port 1337",
+    "dev-server": "node examples/helloworld/index.js"
   },
   "dependencies": {
     "ws": "^5.1.1"
