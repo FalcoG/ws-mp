@@ -17,7 +17,10 @@ Hello.player.on('connect', e => {
 
 Hello.player.on('text', e => {
   if (e.message.indexOf('blacklisted') === -1) {
-    e.promise.resolve(`Team Blue ${e.message}`);
+    const message = e.message.replace('test', '****');
+    e.promise.resolve(message);
+
+    console.log('Text:', message);
   } else {
     e.promise.reject('Forbidden')
   }
@@ -27,4 +30,10 @@ Hello.player.on('command', e => {
   console.log('Command:', e);
 
   e.promise.reject('Does this actually work?');
+});
+
+Hello.player.on('movement', e => {
+  console.log('Movement:', e.message);
+
+  e.promise.reject();
 });

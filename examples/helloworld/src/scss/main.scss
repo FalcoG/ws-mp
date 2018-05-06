@@ -1,4 +1,178 @@
+html, body {
+  height: 100%;
+}
+
 body{
   font-family: arial, helvetica, sans-serif;
   background: darken(#efefef, 10);
+  margin: 0;
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[data-position] {
+  position: absolute;
+  margin: 5vmin;
+}
+
+[data-position*='top']    { top:    0 }
+[data-position*='bottom'] { bottom: 0 }
+[data-position*='left']   { left:   0 }
+[data-position*='right']  { right:  0 }
+
+[data-position*='right middle'],
+[data-position*='left middle'] {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+[data-position*='top middle'],
+[data-position*='middle top'],
+[data-position*='middle bottom'],
+[data-position*='bottom middle'] {
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#interface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      padding: 0;
+    }
+  }
+
+  .chat {
+    background: saddlebrown;
+    padding: .3em;
+    border-radius: .2em;
+
+    .output {
+      max-height: 20vh;
+      overflow-y: scroll;
+      width: 30em;
+      max-width: 30vw;
+      margin: 0;
+      background: sandybrown;
+      padding: .5em;
+      border-radius: .2em;
+
+      .self:before {
+        content: 'You: ';
+        color: #444;
+      }
+    }
+
+    label {
+      input {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+
+  .compass {
+    background: sandybrown;
+    height: 25vmin;
+    width: 25vmin;
+    border-radius: 50%;
+    border: 0.3em solid saddlebrown;
+
+    &:before {
+      content: 'N';
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.5em;
+
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1.5em;
+      height: 1.5em;
+      border-radius: 50%;
+
+      background: saddlebrown;
+    }
+
+    .pointer {
+      background: white;
+      width: .6em;
+      height: .6em;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+
+      border-radius: 50%;
+      border: .1em solid black;
+      transform: translate(-50%, -50%);
+    }
+
+    .map {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+  }
+
+  .condition {
+    background: saddlebrown;
+    width: 35vmin;
+    border-radius: .3em;
+
+    text-align: right;
+    font-size: .85rem;
+    color: darkgrey;
+
+    li {
+      background: rgba(0, 0, 0, 0.15);
+      margin: .5em;
+      padding: .6em;
+      position: relative;
+      border-radius: .2em;
+      overflow: hidden;
+
+      .status {
+        background: forestgreen;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      .quantity {
+        position: relative;
+      }
+    }
+  }
+
+  .tool-belt {
+    background: saddlebrown;
+    border-radius: .2em;
+
+    display: flex;
+    flex-direction: row;
+    padding: .25em;
+
+    [data-slot] {
+      width: 5vmin;
+      height: 5vmin;
+      border-radius: .2em;
+      background: sandybrown;
+      margin: .25em;
+    }
+  }
 }

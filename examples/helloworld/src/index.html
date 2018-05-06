@@ -6,15 +6,46 @@
 </head>
 <body>
 
-<h1>Hello World</h1>
+<div id='interface'>
+    <div class='chat' data-position='top left'>
+        <ul class='output'></ul>
 
-<div id='chat'>
-    <ul class='output'></ul>
+        <label>
+            PlayerText
+            <input type='text' data-action='PlayerText'>
+        </label>
+    </div>
 
-    <label>
-        PlayerText
-        <input type='text' data-action='PlayerText'>
-    </label>
+    <div class='compass' data-position='top right'>
+        <span class='pointer'></span>
+        <div class='map'>
+            <img src='https://i.imgur.com/qg0yuhB.png' alt='' />
+        </div>
+    </div>
+
+    <ul class='condition' data-position='bottom right'>
+        <li class='hunger'>
+            <span class='status' style='width:40%'></span>
+            <span class='quantity'>200</span>
+        </li>
+        <li class='thirst'>
+            <span class='status' style='width:80%'></span>
+            <span class='quantity'>400</span>
+        </li>
+        <li class='health'>
+            <span class='status' style='width:70%'></span>
+            <span class='quantity'>350</span>
+        </li>
+    </ul>
+
+    <ul class='tool-belt' data-position='middle bottom'>
+        <li data-slot='1'></li>
+        <li data-slot='2'></li>
+        <li data-slot='3'></li>
+        <li data-slot='4'></li>
+        <li data-slot='5'></li>
+        <li data-slot='6'></li>
+    </ul>
 </div>
 
 <pre>
