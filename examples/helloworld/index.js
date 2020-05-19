@@ -15,10 +15,25 @@ const Hello = new GameMode;
 Hello.player.on('connect', e => {
   console.log('Player connected!', e.user.auth);
 
+  /**
+   * user.character is public
+   * user.* is private / client only
+   */
   e.user.character = {
     name: e.user.auth.token === '1337'
       ? 'Falco'
-      : 'guest-' + crypto.randomBytes(4).toString('hex')
+      : 'guest-' + crypto.randomBytes(4).toString('hex'),
+    meta: {
+      condition: {
+        health: Math.floor(Math.random() * Math.floor(100)),
+        nutrition: Math.floor(Math.random() * Math.floor(100)),
+        hydration: Math.floor(Math.random() * Math.floor(100)),
+      }
+    }
+  }
+
+  e.user.private = {
+    test: 'privately kept non-shared data - or something like that'
   }
 
   if (e.user.character.name === 'Banned-name') {

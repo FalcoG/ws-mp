@@ -4,7 +4,9 @@ html, body {
 
 body{
   font-family: arial, helvetica, sans-serif;
-  background: darken(#efefef, 10);
+  //background: darken(#efefef, 10);
+  background: black url(https://i.imgur.com/7XoFExE.png) no-repeat center;
+  background-size: cover;
   margin: 0;
   color: white;
 }
@@ -72,7 +74,7 @@ body{
           text-shadow: 0 0 0.1em;
         }
 
-        &.self:before {
+        &[data-uuid=self]:before {
           color: darkcyan;
         }
       }
@@ -169,7 +171,7 @@ body{
         .status { background: #EA2839 }
       }
 
-      &.thirst {
+      &.hydration {
         .status { background: dodgerblue }
       }
 
@@ -183,6 +185,16 @@ body{
 
       .quantity {
         position: relative;
+      }
+
+      &:before {
+        content: attr(class);
+        text-transform: capitalize;
+        color: white;
+
+        position: absolute;
+        z-index: 1;
+        left: .6em;
       }
     }
   }

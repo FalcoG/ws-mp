@@ -4,7 +4,11 @@ const ws = new WebSocket(`ws://token:${queryParams.get('token')}@localhost:1338?
 
 import './scss/main.scss';
 
+import Engine from './lib/Engine';
+import Entity from './lib/Entity';
+
 const queue = {};
+const game = new Engine()
 
 class Users {
   constructor () {
@@ -12,10 +16,14 @@ class Users {
   }
 
   add (character, identifier = 'self') {
+    character.entity = new Entity('player', character.meta);
+
     if (!character.name) {
       this.users = { ...this.users, ...character };
     } else {
       this.users[identifier] = character;
+
+      if (identifier === 'self') GUI.update(character)
     }
   }
 
@@ -53,15 +61,55 @@ class Action {
   }
 }
 
-document.querySelector('[data-action="PlayerText"]').addEventListener('keyup', (e) => {
-  if (e.keyCode === 13) {
+class Interfaces {
+  constructor (container) {
+    this.elements = {
+      PlayerText: container.querySelector('[data-action="PlayerText"]'),
+      Condition: container.querySelector('.condition')
+    }
+  }
+
+  update (character) {
+    if (character.meta) {
+      this.setPlayerConditions(character.meta.condition);
+    }
+  }
+
+  close (e) {
+    e.target.blur()
+  }
+
+  focus (element) {
+    this.elements[element].focus()
+  }
+
+  setPlayerConditions (conditions) {
+    if (!conditions) return false
+
+    Object.keys(conditions).forEach(key => {
+      this.setPlayerCondition(key, conditions[key])
+    })
+
+    return true;
+  }
+
+  setPlayerCondition (type, value) {
+    const conditionElement = this.elements.Condition.getElementsByClassName(type)[0]
+    conditionElement.querySelector('.quantity').textContent = value + '%'
+    conditionElement.querySelector('.status').style.width = value + '%'
+  }
+}
+
+const GUI = new Interfaces(document.getElementById('interface'));
+
+GUI.elements.PlayerText.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter' && e.target.value.length) {
     e.target.setAttribute('disabled', true);
     new Action('text', e.target.value).then(
       res => {
         console.log('Message confirmed', res);
         e.target.value = '';
         e.target.removeAttribute('disabled');
-        e.target.focus();
       },
       err => {
         console.log('Message denied. Reason:', err);
@@ -98,11 +146,8 @@ ws.onmessage = message => {
       if (res.success && !res.id || !res.success) {
         const elem = document.createElement('li');
 
-        if (!res.id) {
-          elem.classList.add('self');
-        }
-
         elem.setAttribute('data-username', character.name);
+        elem.setAttribute('data-uuid', res.id ? res.id : 'self');
         elem.innerText = res.message;
 
         const output = document.querySelector('.chat .output');
@@ -114,18 +159,44 @@ ws.onmessage = message => {
 }
 
 document.addEventListener('keydown', (e) => {
+  if (e.key === 'Meta' || e.metaKey || e.ctrlKey) return
+
+  // Global shortcuts (must not type elsewhere)
   if (e.target === document.body) {
-    const type = 'forward';
-
-    new Action('movement', { type }).then(
-      res => {
-        console.log('Resolved', res);
-      },
-      err => {
-        console.log('Failed to move', err);
-      }
-    );
-
     console.log('key is down', e);
+
+    e.preventDefault(); // Cancel the key output - does not fully work with [enter]
+
+    switch (e.key) {
+      case 'Enter':
+      case 'j': // Battlefield
+      case '/':
+        GUI.focus('PlayerText');
+        break;
+      default:
+        const type = 'forward';
+
+        new Action('movement', { type }).then(
+          res => {
+            console.log('Resolved', res);
+          },
+          err => {
+            console.log('Failed to move', err);
+          }
+        );
+    }
+  } else if (e.key === 'Escape') {
+    console.log('Close');
+    GUI.close(e);
   }
 });
+
+document.addEventListener('click', e => {
+  if (e.target) {
+    const uuid = e.target.getAttribute('data-uuid');
+
+    if (uuid) {
+      console.log(users.get(uuid));
+    }
+  }
+})
